@@ -1,0 +1,55 @@
+{
+  "name": "redis-caching",
+  "version": "1.0.0",
+  "description": "Redis Caching Tutorial",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "start": "node ./dist/index.js",
+    "start-local": "nodemon ./dist/index.js",
+    "start-dev": "cross-env NODE_ENV=development nodemon ./dist/index.js",
+    "start-qa": "cross-env NODE_ENV=qa nodemon ./dist/index.js",
+    "start-prod": "cross-env NODE_ENV=production nodemon ./dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/NebyuCodes/redis-caching.git"
+  },
+  "keywords": [
+    "Redis",
+    "Node",
+    "JS",
+    "IO",
+    "Redis"
+  ],
+  "author": "Nebyu Samuel, Friday Night Coding with Neba",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NebyuCodes/redis-caching/issues"
+  },
+  "homepage": "https://github.com/NebyuCodes/redis-caching#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "csurf": "^1.10.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.7.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/csurf": "^1.11.5",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.10.2"
+  }
+}
