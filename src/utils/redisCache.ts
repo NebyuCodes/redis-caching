@@ -7,7 +7,7 @@ import { RedisClient } from "../infrastructure/database";
 export async function getCache<T>(cacheKey: string): Promise<T | null> {
   try {
     // Get redis connection
-    const redis = RedisClient.getInstance();
+    const redis = RedisClient.getCacheInstance();
 
     // Get cached data
     const cachedData = await redis.get(cacheKey);
@@ -35,7 +35,7 @@ export async function setCache<T>(
   ttl: number
 ): Promise<void> {
   try {
-    const redis = RedisClient.getInstance();
+    const redis = RedisClient.getCacheInstance();
 
     await redis.set(cacheKey, JSON.stringify(cacheData), "EX", ttl);
   } catch (error) {
@@ -50,7 +50,7 @@ export async function setCache<T>(
  */
 export async function deleteCache(cacheKey: string): Promise<void> {
   try {
-    const redis = RedisClient.getInstance();
+    const redis = RedisClient.getCacheInstance();
 
     await redis.del(cacheKey);
   } catch (error) {

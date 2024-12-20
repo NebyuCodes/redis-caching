@@ -1,7 +1,10 @@
 import { createServer } from "http";
 import { app } from "./app";
 import { bootstrapMongo } from "../../infrastructure";
-import { RedisClient } from "../../infrastructure/database";
+import {
+  RedisClient,
+  bootstrapRedisSubscription,
+} from "../../infrastructure/database";
 
 /**
  * @param {}
@@ -18,7 +21,9 @@ export const bootstrapRest = () => {
 
   const mongoConnection = bootstrapMongo();
 
-  RedisClient.getInstance().on("error", (error) => {
+  bootstrapRedisSubscription();
+
+  RedisClient.getCacheInstance().on("error", (error) => {
     console.log("Redis Error.");
     console.error(error);
   });
@@ -38,10 +43,30 @@ export const bootstrapRest = () => {
         console.error(error);
       });
 
-    RedisClient.getInstance()
+    RedisClient.getCacheInstance()
       .quit()
       .then(() => {
-        console.log("Redis is closing.");
+        console.log("Redis Cache is closing.");
+      })
+      .catch((error) => {
+        console.log("Error while closing redis.");
+        console.error(error);
+      });
+
+    RedisClient.getPublisherInstance()
+      .quit()
+      .then(() => {
+        console.log("Redis Publisher is closing.");
+      })
+      .catch((error) => {
+        console.log("Error while closing redis.");
+        console.error(error);
+      });
+
+    RedisClient.getSubscriberInstance()
+      .quit()
+      .then(() => {
+        console.log("Redis Subscriber is closing.");
       })
       .catch((error) => {
         console.log("Error while closing redis.");

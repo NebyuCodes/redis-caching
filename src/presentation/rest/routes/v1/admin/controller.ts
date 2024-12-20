@@ -25,7 +25,7 @@ import { AppError, NotFoundError } from "../../../../../shared";
 import { adminService } from "./di";
 import { NoAdminFound } from "../../../../../shared/errors/noAdmin.error";
 import { IAdminEntityMongoDB } from "../../../../../infrastructure/database/mongo/admin";
-import { RedisClient } from "../../../../../infrastructure/database";
+import { notifyAdmin } from "../../../../../infrastructure/database/redis";
 
 // Create first account
 export const createFirstAccount: RequestHandler = async (req, res, next) => {
@@ -48,8 +48,6 @@ export const createFirstAccount: RequestHandler = async (req, res, next) => {
       phoneNumber: data.phoneNumber,
       password: hashedPassword,
     });
-
-    // History
 
     // Respond
     res.status(200).json({
@@ -155,6 +153,11 @@ export const createAdmin: RequestHandler = async (req, res, next) => {
       password: defaultPassword(),
     });
 
+    // Notify admin
+    if (admin) {
+      notifyAdmin("newAdminCreated", JSON.stringify(admin));
+    }
+
     res.status(200).json({
       status: "SUCCESS",
       message: "Admin account is successfully created",
@@ -175,7 +178,7 @@ export const getAdmin: RequestHandler = async (req, res, next) => {
     );
     if (cachedAdmin) {
       console.log("Getting Cache data - Cache hit");
-      await deleteCache(`admin_${req.params.id}`);
+      // await deleteCache(`admin_${req.params.id}`);
       res.status(200).json({
         status: "SUCCESS",
         data: {
@@ -461,6 +464,8 @@ export const deleteAdmin: RequestHandler = async (req, res, next) => {
     if (!admin) return next(new NoAdminFound());
 
     await deleteCache(`admin_${req.params.id}`);
+
+    notifyAdmin("deleteAdmin", "I am deleteing an email.");
 
     res.status(200).json({
       status: "SUCCESS",

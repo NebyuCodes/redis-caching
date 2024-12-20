@@ -1,4 +1,4 @@
 import { bootstrapMongo } from "./mongo";
-import { RedisClient } from "./redis";
+import { RedisClient, bootstrapRedisSubscription } from "./redis";
 
-export { bootstrapMongo, RedisClient };
+export { bootstrapMongo, RedisClient, bootstrapRedisSubscription };
