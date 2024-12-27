@@ -14,18 +14,21 @@ export const geh = (
   err.status = err.status || "ERROR";
   err.statusCode = err.statusCode || 500;
 
+  // Handle duplicate key errors
   if (err.message.includes("11000")) {
-    if (err.message.includes("email")) {
-      err = new DuplicateError("Email already exists");
-    } else if (err.message.includes("phone_number")) {
-      err = new DuplicateError("Phone number already exists");
-    } else if (err.message.includes("title")) {
-      err = new DuplicateError("Title already exists");
-    } else if (err.message.includes("links")) {
-      err = new DuplicateError("Link URL already exists");
-    } else if (err.message.includes("name")) {
-      err = new DuplicateError("Name already exists");
-    }
+    const duplicateFields: { [key: string]: string } = {
+      email: "Email already exists",
+      phone_number: "Phone number already exists",
+      title: "Title already exists",
+      links: "Link URL already exists",
+      name: "Name already exists",
+    };
+
+    Object.entries(duplicateFields).forEach(([key, message]) => {
+      if (err.message.includes(key)) {
+        err = new DuplicateError(message);
+      }
+    });
   }
 
   // Local, Dev, QA, or Production error
@@ -33,5 +36,10 @@ export const geh = (
     sendDevError(err, res);
   } else if (configs.env === "qa" || configs.env === "production") {
     sendProd(err, res);
+  } else {
+    res.status(500).json({
+      status: "ERROR",
+      message: "An unknown error occurred.",
+    });
   }
 };

@@ -26,6 +26,7 @@ import { adminService } from "./di";
 import { NoAdminFound } from "../../../../../shared/errors/noAdmin.error";
 import { IAdminEntityMongoDB } from "../../../../../infrastructure/database/mongo/admin";
 import { notifyAdmin } from "../../../../../infrastructure/database/redis";
+import { NotAuthorizedError } from "../../../../../shared/errors";
 
 // Create first account
 export const createFirstAccount: RequestHandler = async (req, res, next) => {
@@ -146,6 +147,13 @@ export const updateDefaultPassword: RequestHandler = async (req, res, next) => {
 export const createAdmin: RequestHandler = async (req, res, next) => {
   try {
     const data = <ICreateAdminDto>req.body;
+    
+    // const adminData = await adminService.getAdminByEmailOrPhoneNumber(
+    //   data.email
+    // );
+
+    // if (adminData)
+    //   return next(new AppError("Admin already exists with this email.", 400));
 
     // Create an admin
     const admin = await adminService.createAdmin({
@@ -255,7 +263,7 @@ export const updateAdminAccountStatus: RequestHandler = async (
     const adminReq = <IAdminEntityMongoDB>req.admin;
 
     if (adminReq.id === req.params.id) {
-      return next(new AppError("You can not change your own status", 403));
+      return next(new NotAuthorizedError("You can not change your own status"));
     }
 
     // Check if the id is owner's id and it exists
