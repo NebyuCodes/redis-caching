@@ -5,6 +5,7 @@ import { signToken } from "./signJwtToken";
 import { verifyToken } from "./verifyJwtToken";
 import { APIFeatures } from "./apiFeatures";
 import { getCache, setCache, deleteCache } from "./redisCache";
+import { logger } from "./logger";
 
 export {
   hashPassword,
@@ -16,4 +17,5 @@ export {
   getCache,
   setCache,
   deleteCache,
+  logger,
 };

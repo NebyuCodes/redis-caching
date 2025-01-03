@@ -1,0 +1,7 @@
+info: MongoDB is successfully connected
+warn: Unable to connect to DB
+error: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+info: DB is error might happen due to connection string issue.
+warn: Unable to connect to DB
+error: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+info: DB is error might happen due to connection string issue.

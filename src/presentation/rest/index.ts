@@ -5,6 +5,7 @@ import {
   RedisClient,
   bootstrapRedisSubscription,
 } from "../../infrastructure/database";
+import { logger } from "../../utils";
 
 /**
  * @param {}
@@ -24,53 +25,55 @@ export const bootstrapRest = () => {
   bootstrapRedisSubscription();
 
   RedisClient.getCacheInstance().on("error", (error) => {
-    console.log("Redis Error.");
-    console.error(error);
+    logger.info("Redis Error.");
+    logger.error(error);
   });
 
   process.on("SIGINT", () => {
     server.close(() => {
-      console.warn(`Server is closing`);
+      logger.warn(`Server is closing`);
     });
 
     mongoConnection
       .close()
       .then(() => {
-        console.log("Mongo is closing");
+        logger.info("Mongo is closing");
       })
       .catch((error) => {
-        console.log("Error while closing mongodb.");
-        console.error(error);
+        logger.info("Error while closing mongodb.");
+        logger.error(error);
       });
 
     RedisClient.getCacheInstance()
       .quit()
       .then(() => {
-        console.log("Redis Cache is closing.");
+        logger.info("Redis Cache is closing.");
       })
       .catch((error) => {
-        console.log("Error while closing redis.");
-        console.error(error);
+        logger.info("Error while closing redis.");
+        logger.error(error);
       });
 
     RedisClient.getPublisherInstance()
       .quit()
       .then(() => {
-        console.log("Redis Publisher is closing.");
+        logger.info("Redis Publisher is closing.");
       })
       .catch((error) => {
-        console.log("Error while closing redis.");
-        console.error(error);
+        logger.info("Error while closing redis.");
+        logger.error(error);
       });
 
     RedisClient.getSubscriberInstance()
       .quit()
       .then(() => {
-        console.log("Redis Subscriber is closing.");
+        logger.info("Redis Subscriber is closing.");
       })
       .catch((error) => {
-        console.log("Error while closing redis.");
-        console.error(error);
+        logger.info("Error while closing redis.");
+        logger.error(error);
       });
+
+    process.exit(0);
   });
 };
